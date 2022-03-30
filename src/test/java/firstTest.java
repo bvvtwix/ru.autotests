@@ -1,5 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -10,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class firstTest {
     private Logger logger = LogManager.getLogger(firstTest.class);
+    private ConfigServer cfg = ConfigFactory.create(ConfigServer.class);
 
     WebDriver driver;
 
@@ -35,6 +37,6 @@ public class firstTest {
 
     @Test
     public void openOtus(){
-        driver.get("https://otus.ru");
+        driver.get(cfg.url());
     }
 }
