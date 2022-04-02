@@ -20,8 +20,8 @@ public class firstTest {
     private Logger logger = LogManager.getLogger(firstTest.class);
     private ConfigServer cfg = ConfigFactory.create(ConfigServer.class);
 
-    private final String EMAIL = "sorox81206@nuesond.com";
-    private final String PASSWORD = "test2022";
+//    private final String EMAIL = "sorox81206@nuesond.com";
+//    private final String PASSWORD = "test2022";
 
     WebDriver driver;
 
@@ -45,10 +45,10 @@ public class firstTest {
         logger.info("info - info level log");
     }
 
-//    @Test
-//    public void openOtus(){
-//        driver.get(cfg.url());
-//    }
+    @Test
+    public void openOtusCfg(){
+        driver.get(cfg.url());
+    }
 
     @Test
     public void FindYandex() throws InterruptedException {
@@ -63,10 +63,10 @@ public class firstTest {
         logger.info("Auth form opened");
 
         WebElement emailField = driver.findElement(By.cssSelector("input.new-input[name='email'][type='text']"));
-        emailField.sendKeys(EMAIL);
+        emailField.sendKeys(cfg.email());
 
         WebElement passField = driver.findElement(By.cssSelector("input.new-input[name='password'][type='password']"));
-        passField.sendKeys(PASSWORD);
+        passField.sendKeys(cfg.pass());
 
         WebElement enter = driver.findElement(By.cssSelector("button[type='submit'][class='new-button new-button_full new-button_blue new-button_md']"));
         enter.click();

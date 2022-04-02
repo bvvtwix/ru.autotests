@@ -6,4 +6,8 @@ import org.aeonbits.owner.Config.Key;
 public interface ConfigServer extends  Config{
     @Key("url")
     String url();
+    @Key("email")
+    String email();
+    @Key("pass")
+    String pass();
 }
