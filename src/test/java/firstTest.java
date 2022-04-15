@@ -1,6 +1,7 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import org.aeonbits.owner.ConfigFactory;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -8,27 +9,27 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.theories.Theories;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class firstTest {
-    private Logger logger = LogManager.getLogger(firstTest.class);
-    private ConfigServer cfg = ConfigFactory.create(ConfigServer.class);
-
-//    private final String EMAIL = "sorox81206@nuesond.com";
-//    private final String PASSWORD = "test2022";
+    protected Logger logger = LogManager.getLogger(firstTest.class);
+    protected ConfigServer cfg = ConfigFactory.create(ConfigServer.class);
 
     WebDriver driver;
+    Actions action;
 
     @Before
     public void setUp(){
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        action = new Actions(driver);
        // logger.info("driver up");
     }
 
@@ -37,6 +38,13 @@ public class firstTest {
         if (driver != null){
             driver.quit();
         }
+    }
+
+    @Test
+    public void testJS(){
+        driver.get("https://ya.ru");
+        ((JavascriptExecutor)driver).executeScript("$(\"#text\").hide();");
+        saveFile(((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE));
     }
 
     @Test
@@ -54,7 +62,8 @@ public class firstTest {
     public void FindYandex() throws InterruptedException {
         driver.get("https://yandex.ru");
         driver.findElement(By.id("text")).sendKeys("qweqwe" + Keys.ENTER);
-        Thread.sleep(5000);
+        File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        saveFile(file);
     }
 
     public void auth() throws InterruptedException {
@@ -91,6 +100,7 @@ public class firstTest {
     public void openOtus(){
         driver.get("https://otus.ru/");
         logger.info("otus.ru opened");
+
     }
 
     @Test
@@ -116,6 +126,7 @@ public class firstTest {
         // 3.
         enterToAboutMyself();
         Thread.sleep(1000);
+
         // 4. insert data
         // Имя
         WebElement fname = driver.findElement(By.cssSelector("input[name='fname']"));
@@ -258,7 +269,29 @@ public class firstTest {
         logger.info("id_work success checked");
         logger.info("all field success checked");
 
+    }
 
+    private void saveFile(File data) {
+        String fileName = "target/" + System.currentTimeMillis() + ".png";
+        try {
+            FileUtils.copyFile(data, new File(fileName));
+        } catch (IOException e) {
+            logger.error(e);
+        }
+    }
 
+    @Test
+    public void draw(){
+
+        driver.get("http://www.htmlcanvasstudio.com");
+        WebElement canvas = driver.findElement(By.cssSelector("#imageTemp"));
+
+        Actions beforeBuild = action
+                .clickAndHold(canvas)
+                .moveByOffset(100, 100)
+                .moveByOffset(-50, -10)
+                .release();
+        beforeBuild.perform();
+        saveFile(canvas.getScreenshotAs(OutputType.FILE));
     }
 }
